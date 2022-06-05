@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: test
+  application:
+    name: assignment
+
+server:
+  port: 9999
+  servlet:
+    context-path: /virtual-power-plant
+
+
+
+
+
