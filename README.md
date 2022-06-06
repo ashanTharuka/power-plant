@@ -31,7 +31,7 @@ power-plant rest APIs
 
 `GET`
 
-    localhost:9999/virtual-power-plant/api/v1/batteries/create
+    localhost:9999/virtual-power-plant/api/v1/batteries/get-by-postcode-range/{postcodeRangeStart}/{postcodeRangeEnd}
 
 ### Response
 
