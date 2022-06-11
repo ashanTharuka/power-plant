@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public interface BatteryRepository extends JpaRepository<Battery, Long> {
@@ -14,6 +14,4 @@ public interface BatteryRepository extends JpaRepository<Battery, Long> {
     @Query("select b from Battery b where b.postcode " +
             "between :postCodeRangeStart and :postCodeRangeEnd order by b.name ASC")
     List<Battery> getBatteriesByPostCodeRange(int postCodeRangeStart, int postCodeRangeEnd);
-
-    Optional<Battery> findBatteryByName(String name);
 }

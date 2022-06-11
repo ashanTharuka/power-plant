@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
 @RestController
 @RequestMapping(value = "/api/v1/batteries")
 public class BatteryController {
@@ -31,7 +32,6 @@ public class BatteryController {
         Battery battery = batteryService.createBattery(batteryDto);
         return ResponseEntity.status(HttpStatus.CREATED).
                 body(new PowerPlantResponse(HttpStatus.CREATED, battery));
-
     }
 
     @GetMapping(value = "/get-by-postcode-range/{postcodeRangeStart}/{postcodeRangeEnd}",

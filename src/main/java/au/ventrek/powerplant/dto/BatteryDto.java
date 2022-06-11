@@ -2,20 +2,20 @@ package au.ventrek.powerplant.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 
 @Data
 public class BatteryDto {
-    @NotEmpty(message = "Battery name is required")
+
+    @NotBlank(message = "'name' is required")
     private String name;
 
-    @NotEmpty(message = "postcode is required")
+    @NotBlank(message = "'postcode' is required")
+    @Pattern(regexp = "^\\d{4}",message = "'postcode' should be a 4 digit number")
     private String postcode;
 
-    @NotNull(message = "capacity is required")
-    @Size(min = 2,message = "capacity capacity should be more than 2 digits")
+    @NotBlank(message = "'capacity' is required")
+    @Pattern(regexp = "^[1-9][0-9]*$",message = "'capacity' should be greater than 0")
     private String capacity;
 }

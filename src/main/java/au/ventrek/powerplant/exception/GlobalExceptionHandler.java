@@ -4,8 +4,11 @@ import au.ventrek.powerplant.dto.PowerPlantResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -38,8 +42,11 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(e.getErrorCode()).body(new PowerPlantResponse(e.getErrorCode(), e.getMessage()));
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	protected ResponseEntity<PowerPlantResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+
+
+
+	@ExceptionHandler({ MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
 		Map<String, List<String>> errorBody=new HashMap<>();
 		List<String>errors=ex.getBindingResult()
 				.getFieldErrors()

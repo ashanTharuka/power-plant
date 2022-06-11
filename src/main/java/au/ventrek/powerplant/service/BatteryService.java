@@ -11,5 +11,7 @@ public interface BatteryService {
 
     BatteryResponse getBatteriesByPostCodeRange(int postCodeRangeStart, int postCodeRangeEnd) throws DCBException;
 
+    boolean exists(Battery battery);
+
 
 }

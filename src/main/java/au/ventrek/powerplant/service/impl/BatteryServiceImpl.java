@@ -3,14 +3,16 @@ package au.ventrek.powerplant.service.impl;
 import au.ventrek.powerplant.domain.Battery;
 import au.ventrek.powerplant.dto.BatteryDto;
 import au.ventrek.powerplant.dto.BatteryResponse;
+import au.ventrek.powerplant.exception.DCBError;
 import au.ventrek.powerplant.exception.DCBException;
 import au.ventrek.powerplant.repository.BatteryRepository;
 import au.ventrek.powerplant.service.BatteryService;
-import org.springframework.http.HttpStatus;
+import au.ventrek.powerplant.util.Constants;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BatteryServiceImpl implements BatteryService {
@@ -24,15 +26,16 @@ public class BatteryServiceImpl implements BatteryService {
 
     @Override
     public Battery createBattery(BatteryDto batteryDto) throws DCBException {
-        Optional<Battery> battery = batteryRepository.findBatteryByName(batteryDto.getName());
-        if (battery.isPresent()){
-            throw new DCBException(HttpStatus.CONFLICT);
+        Battery battery = new Battery();
+        battery.setName(batteryDto.getName());
+        battery.setPostcode(Integer.parseInt(batteryDto.getPostcode()));
+        battery.setWattCapacity(Integer.parseInt(batteryDto.getCapacity()));
+
+        boolean exists=exists(battery);
+        if (exists){
+            throw new DCBException(DCBError.CONFLICT);
         }
-        Battery product = new Battery();
-        product.setName(batteryDto.getName());
-        product.setPostcode(Integer.parseInt(batteryDto.getPostcode()));
-        product.setWattCapacity(Integer.parseInt(batteryDto.getCapacity()));
-        return batteryRepository.save(product);
+        return batteryRepository.save(battery);
     }
 
 
@@ -41,7 +44,7 @@ public class BatteryServiceImpl implements BatteryService {
 
         List<Battery> batteryList = batteryRepository.getBatteriesByPostCodeRange(postCodeRangeStart, postCodeRangeEnd);
         if(batteryList.isEmpty()){
-            throw new DCBException(HttpStatus.NOT_FOUND);
+            throw new DCBException(DCBError.NOT_FOUND);
         }
         int totalWatt = batteryList.stream()
                 .mapToInt(Battery::getWattCapacity)
@@ -52,6 +55,18 @@ public class BatteryServiceImpl implements BatteryService {
         batteryResponse.setAverageWattCapacity(averageWatt);
         batteryResponse.setTotalWattCapacity(totalWatt);
         return batteryResponse;
+    }
+
+
+
+    @Override
+    public boolean exists(Battery battery) {
+        ExampleMatcher matcher=ExampleMatcher.matching()
+                .withIgnorePaths(Constants.BATTERY_ID.value())
+                .withIncludeNullValues()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Battery> example = Example.of(battery, matcher);
+        return batteryRepository.exists(example);
     }
 
 

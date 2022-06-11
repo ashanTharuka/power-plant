@@ -14,8 +14,8 @@ public class BatteryResponse {
 
     public void setBatteryList(List<Battery> batteries) {
         if (!batteries.isEmpty()){
-            this.batteries=batteries.stream().
-                    map(Battery::getName)
+            this.batteries=batteries.stream()
+                    .map(Battery::getName)
                     .collect(Collectors.toList());
         }
     }
