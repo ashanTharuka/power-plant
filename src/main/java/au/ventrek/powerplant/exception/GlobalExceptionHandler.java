@@ -22,39 +22,38 @@ import java.util.stream.Collectors;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<PowerPlantResponse> handleGlobalException(Exception exception) {
-		LOGGER.error(" handleGlobalException error : ",exception);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
-				body(new PowerPlantResponse(HttpStatus.INTERNAL_SERVER_ERROR));
-	}
-	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-	public ResponseEntity<PowerPlantResponse> handleMediaTypeException(HttpMediaTypeNotSupportedException exception) {
-		LOGGER.error(" handleMediaTypeException error : ",exception);
-		return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).
-				body(new PowerPlantResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE));
-	}
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<PowerPlantResponse> handleGlobalException(Exception exception) {
+        LOGGER.error("handleGlobalException error : ", exception);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                body(new PowerPlantResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception));
+    }
 
-	@ExceptionHandler(DCBException.class)
-	 ResponseEntity<PowerPlantResponse> handleGlobalException(DCBException e) {
-		return ResponseEntity.status(e.getErrorCode()).body(new PowerPlantResponse(e.getErrorCode(), e.getMessage()));
-	}
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<PowerPlantResponse> handleMediaTypeException(HttpMediaTypeNotSupportedException exception) {
+        LOGGER.error("handleMediaTypeException error : ", exception);
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).
+                body(new PowerPlantResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE, exception));
+    }
 
+    @ExceptionHandler(DCBException.class)
+    ResponseEntity<PowerPlantResponse> handleGlobalException(DCBException ex) {
+        return ResponseEntity.status(ex.getErrorCode())
+                .body(new PowerPlantResponse(ex.getErrorCode(), ex.getMessage(), ex));
+    }
 
-
-
-	@ExceptionHandler({ MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-		Map<String, List<String>> errorBody=new HashMap<>();
-		List<String>errors=ex.getBindingResult()
-				.getFieldErrors()
-				.stream()
-				.map(DefaultMessageSourceResolvable::getDefaultMessage)
-				.collect(Collectors.toList());
-		errorBody.put("errors",errors);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-				new PowerPlantResponse(HttpStatus.BAD_REQUEST,errorBody));
-	}
+    @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        Map<String, List<String>> errorBody = new HashMap<>();
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+        errorBody.put("errors", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new PowerPlantResponse(HttpStatus.BAD_REQUEST, errorBody));
+    }
 }
