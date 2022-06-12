@@ -40,6 +40,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DCBException.class)
     ResponseEntity<PowerPlantResponse> handleGlobalException(DCBException ex) {
+        LOGGER.warn("handleGlobalException error : ", ex);
         return ResponseEntity.status(ex.getErrorCode())
                 .body(new PowerPlantResponse(ex.getErrorCode(), ex.getMessage(), ex));
     }
