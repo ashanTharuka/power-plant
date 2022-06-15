@@ -4,7 +4,7 @@ import au.ventrek.powerplant.domain.Battery;
 import au.ventrek.powerplant.dto.BatteryDto;
 import au.ventrek.powerplant.dto.BatteryResponse;
 import au.ventrek.powerplant.dto.PowerPlantResponse;
-import au.ventrek.powerplant.exception.DCBException;
+import au.ventrek.powerplant.exception.EPPException;
 import au.ventrek.powerplant.service.BatteryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +28,7 @@ public class BatteryController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PowerPlantResponse> createBatteries(@Valid @RequestBody BatteryDto batteryDto)
-            throws DCBException {
+            throws EPPException {
         Battery battery = batteryService.createBattery(batteryDto);
         return ResponseEntity.status(HttpStatus.CREATED).
                 body(new PowerPlantResponse(HttpStatus.CREATED, battery));
@@ -39,7 +39,7 @@ public class BatteryController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PowerPlantResponse> getBatteriesByPostCodeRange
             (@PathVariable("postcodeRangeStart") int postcodeRangeStart,
-             @PathVariable("postcodeRangeEnd") int postcodeRangeEnd) throws DCBException {
+             @PathVariable("postcodeRangeEnd") int postcodeRangeEnd) throws EPPException {
         BatteryResponse batteryList = batteryService.getBatteriesByPostCodeRange(postcodeRangeStart, postcodeRangeEnd);
         return ResponseEntity.status(HttpStatus.OK).
                 body(new PowerPlantResponse(HttpStatus.OK, batteryList));

@@ -4,7 +4,7 @@ import au.ventrek.powerplant.domain.Battery;
 import au.ventrek.powerplant.dto.BatteryDto;
 import au.ventrek.powerplant.dto.BatteryResponse;
 import au.ventrek.powerplant.exception.DCBError;
-import au.ventrek.powerplant.exception.DCBException;
+import au.ventrek.powerplant.exception.EPPException;
 import au.ventrek.powerplant.repository.BatteryRepository;
 import au.ventrek.powerplant.service.impl.BatteryServiceImpl;
 import org.junit.jupiter.api.*;
@@ -51,7 +51,7 @@ class BatteryServiceTest {
 
     @Test
     @DisplayName("create-battery")
-    void createBatteryTest() throws DCBException {
+    void createBatteryTest() throws EPPException {
         when(batteryRepository.save(any())).thenReturn(battery);
         Battery newB = batteryService.createBattery(batteryDto);
         assertEquals(battery, newB);
@@ -61,10 +61,10 @@ class BatteryServiceTest {
     @Test
     @DisplayName("battery-already-created")
     void createSameBatteryTest() {
-        DCBException expected = new DCBException(DCBError.CONFLICT);
+        EPPException expected = new EPPException(DCBError.CONFLICT);
         when(batteryRepository.exists(any())).thenReturn(true);
-        DCBException actual = assertThrows(
-                DCBException.class,
+        EPPException actual = assertThrows(
+                EPPException.class,
                 () -> batteryService
                         .createBattery(batteryDto));
         assertEquals(expected, actual);
@@ -73,7 +73,7 @@ class BatteryServiceTest {
 
     @Test
     @DisplayName("get-battery-by-postcode-range")
-    void getBatteriesByPostCodeRangeTest() throws DCBException {
+    void getBatteriesByPostCodeRangeTest() throws EPPException {
 
         List<Battery> batteryList=new ArrayList<>();
         batteryList.add(new Battery("Cannington",1001,1000));
@@ -94,10 +94,10 @@ class BatteryServiceTest {
     @Test
     @DisplayName("batteries-not-found-by-postcode-range")
     void getBatteriesByOutOfPostCodeRangeTest() {
-        DCBException expectedEx = new DCBException(DCBError.NOT_FOUND);
+        EPPException expectedEx = new EPPException(DCBError.NOT_FOUND);
         when(batteryRepository.getBatteriesByPostCodeRange(anyInt(),anyInt())).thenReturn(new ArrayList<>());
-        DCBException exception = assertThrows(
-                DCBException.class,
+        EPPException exception = assertThrows(
+                EPPException.class,
                 () -> batteryService
                         .getBatteriesByPostCodeRange(10000, 50000));
         Assertions.assertEquals(expectedEx, exception);

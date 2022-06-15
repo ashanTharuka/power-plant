@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/test
+#    url: jdbc:mysql://host.docker.internal:3306/test
+    url: jdbc:mysql://192.168.8.124.:3306/test
     username: root
     password: admin123
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -39,10 +39,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DCBException.class)
-    ResponseEntity<PowerPlantResponse> handleGlobalException(DCBException ex) {
-        LOGGER.warn("handleGlobalException error  : ", ex);
+    ResponseEntity<PowerPlantResponse> handleDCBException(DCBException ex) {
+        LOGGER.warn("handleDCBException error  : ", ex);
         return ResponseEntity.status(ex.getErrorCode())
                 .body(new PowerPlantResponse(ex.getErrorCode(), ex.getMessage(), ex));
+    }
+
+    @ExceptionHandler(EPPException.class)
+    ResponseEntity<PowerPlantResponse> handleEPPException(EPPException ex) {
+        LOGGER.warn("handleEPPException error  : ", ex);
+        return ResponseEntity.status(ex.getErrorCode())
+                .body(new PowerPlantResponse(ex.getErrorCode(), ex.getMessage()));
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
