@@ -56,14 +56,11 @@ public class BatteryServiceImpl implements BatteryService {
         if(batteryList.isEmpty()){
             throw new EPPException(DCBError.NOT_FOUND);
         }
-        int totalWatt = batteryList.stream()
-                .mapToInt(Battery::getWattCapacity)
-                .sum();
-        int averageWatt = totalWatt / batteryList.size();
         BatteryResponse batteryResponse = new BatteryResponse();
         batteryResponse.setBatteryList(batteryList);
-        batteryResponse.setAverageWattCapacity(averageWatt);
-        batteryResponse.setTotalWattCapacity(totalWatt);
+        batteryResponse.assignBatteryNames();
+        batteryResponse.calculateTotalWatt();
+        batteryResponse.calculateAvgWattCapacity();
         return batteryResponse;
     }
 

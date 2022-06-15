@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,9 +80,10 @@ class BatteryServiceTest {
         batteryList.add(new Battery("Midland",5000,3000));
 
         BatteryResponse expected = new BatteryResponse();
-        expected.setBatteries(Arrays.asList("Cannington", "Hay Street", "Midland"));
-        expected.setAverageWattCapacity(2000);
-        expected.setTotalWattCapacity(6000);
+        expected.setBatteryList(batteryList);
+        expected.assignBatteryNames();
+        expected.calculateTotalWatt();
+        expected.calculateAvgWattCapacity();
 
         when(batteryRepository.getBatteriesByPostCodeRange(anyInt(),anyInt())).thenReturn(batteryList);
         BatteryResponse actual = batteryService
