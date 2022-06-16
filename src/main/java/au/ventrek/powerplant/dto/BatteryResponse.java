@@ -1,7 +1,7 @@
 package au.ventrek.powerplant.dto;
 
 import au.ventrek.powerplant.domain.Battery;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class BatteryResponse {
 
     private List<String> batteriesNames;
 
-    @JsonIgnoreProperties
+    @JsonIgnore
     private List<Battery> batteryList;
 
     private int averageWattCapacity;

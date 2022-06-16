@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<PowerPlantResponse> handleGlobalException(Exception exception) {
         LOGGER.error("handleGlobalException error : ", exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
-                body(new PowerPlantResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception));
+                body(new PowerPlantResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
@@ -61,6 +61,7 @@ public class GlobalExceptionHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
         errorBody.put("errors", errors);
+        LOGGER.warn("handleMethodArgumentNotValid : {}", errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new PowerPlantResponse(HttpStatus.BAD_REQUEST, errorBody));
     }

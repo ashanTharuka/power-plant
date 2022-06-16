@@ -3,11 +3,15 @@ spring:
     active: test
   application:
     name: assignment
+  mvc:
+    log-resolved-exception: false
 
 server:
   port: 9999
   servlet:
     context-path: /virtual-power-plant
+
+
 
 
 
