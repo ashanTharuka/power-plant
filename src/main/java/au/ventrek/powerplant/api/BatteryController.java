@@ -2,7 +2,7 @@ package au.ventrek.powerplant.api;
 
 import au.ventrek.powerplant.domain.Battery;
 import au.ventrek.powerplant.dto.BatteryDto;
-import au.ventrek.powerplant.dto.BatteryResponse;
+import au.ventrek.powerplant.dto.BatteryRange;
 import au.ventrek.powerplant.dto.PowerPlantResponse;
 import au.ventrek.powerplant.exception.EPPException;
 import au.ventrek.powerplant.service.BatteryService;
@@ -40,7 +40,7 @@ public class BatteryController {
     public ResponseEntity<PowerPlantResponse> getBatteriesByPostCodeRange
             (@PathVariable("postcodeRangeStart") int postcodeRangeStart,
              @PathVariable("postcodeRangeEnd") int postcodeRangeEnd) throws EPPException {
-        BatteryResponse batteryList = batteryService.getBatteriesByPostCodeRange(postcodeRangeStart, postcodeRangeEnd);
+        BatteryRange batteryList = batteryService.getBatteriesByPostCodeRange(postcodeRangeStart, postcodeRangeEnd);
         return ResponseEntity.status(HttpStatus.OK).
                 body(new PowerPlantResponse(HttpStatus.OK, batteryList));
     }

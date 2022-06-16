@@ -2,7 +2,7 @@ package au.ventrek.powerplant.service;
 
 import au.ventrek.powerplant.domain.Battery;
 import au.ventrek.powerplant.dto.BatteryDto;
-import au.ventrek.powerplant.dto.BatteryResponse;
+import au.ventrek.powerplant.dto.BatteryRange;
 import au.ventrek.powerplant.exception.DCBError;
 import au.ventrek.powerplant.exception.EPPException;
 import au.ventrek.powerplant.repository.BatteryRepository;
@@ -79,14 +79,14 @@ class BatteryServiceTest {
         batteryList.add(new Battery("Hay Street",1005,2000));
         batteryList.add(new Battery("Midland",5000,3000));
 
-        BatteryResponse expected = new BatteryResponse();
+        BatteryRange expected = new BatteryRange();
         expected.setBatteryList(batteryList);
         expected.assignBatteryNames();
         expected.calculateTotalWatt();
         expected.calculateAvgWattCapacity();
 
         when(batteryRepository.getBatteriesByPostCodeRange(anyInt(),anyInt())).thenReturn(batteryList);
-        BatteryResponse actual = batteryService
+        BatteryRange actual = batteryService
                 .getBatteriesByPostCodeRange(1000, 7000);
         assertEquals(expected, actual);
     }

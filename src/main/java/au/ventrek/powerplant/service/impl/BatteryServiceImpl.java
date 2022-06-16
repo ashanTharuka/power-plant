@@ -2,7 +2,7 @@ package au.ventrek.powerplant.service.impl;
 
 import au.ventrek.powerplant.domain.Battery;
 import au.ventrek.powerplant.dto.BatteryDto;
-import au.ventrek.powerplant.dto.BatteryResponse;
+import au.ventrek.powerplant.dto.BatteryRange;
 import au.ventrek.powerplant.exception.DCBError;
 import au.ventrek.powerplant.exception.EPPException;
 import au.ventrek.powerplant.repository.BatteryRepository;
@@ -50,18 +50,18 @@ public class BatteryServiceImpl implements BatteryService {
      * @throws EPPException
      */
     @Override
-    public BatteryResponse getBatteriesByPostCodeRange(int postCodeRangeStart, int postCodeRangeEnd) throws EPPException {
+    public BatteryRange getBatteriesByPostCodeRange(int postCodeRangeStart, int postCodeRangeEnd) throws EPPException {
 
         List<Battery> batteryList = batteryRepository.getBatteriesByPostCodeRange(postCodeRangeStart, postCodeRangeEnd);
         if(batteryList.isEmpty()){
             throw new EPPException(DCBError.NOT_FOUND);
         }
-        BatteryResponse batteryResponse = new BatteryResponse();
-        batteryResponse.setBatteryList(batteryList);
-        batteryResponse.assignBatteryNames();
-        batteryResponse.calculateTotalWatt();
-        batteryResponse.calculateAvgWattCapacity();
-        return batteryResponse;
+        BatteryRange batteryRange = new BatteryRange();
+        batteryRange.setBatteryList(batteryList);
+        batteryRange.assignBatteryNames();
+        batteryRange.calculateTotalWatt();
+        batteryRange.calculateAvgWattCapacity();
+        return batteryRange;
     }
 
 

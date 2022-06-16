@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class BatteryResponse {
+public class BatteryRange {
 
     private List<String> batteriesNames;
 
